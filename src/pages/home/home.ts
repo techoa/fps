@@ -1,14 +1,60 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth';
+import { Platform, NavController, LoadingController } from 'ionic-angular';
+import { TestServiceProvider } from '../../providers/test-service/test-service';
 
+ 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  plat: string;
+  at: any;
+  constructor(private _loginService: TestServiceProvider,public loading: LoadingController,private androidFingerprintAuth: AndroidFingerprintAuth, public navCtrl: NavController, private tts: TextToSpeech, private platform: Platform){
+    if (this.platform.is('ios')) {this.plat="IOS";}
+    if (this.platform.is('android')) {this.plat="Android";}
+    this.tts.speak('Welcome to the GreenPly Managers App for '+this.plat+'. Please login by clicking on the icon.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason)); 
+}
 
+
+
+login() {
+if(this._loginService.authenticated==true){
+
+  this.tts.speak('Please Authenticate to continue.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+  this.androidFingerprintAuth.isAvailable()
+  .then((result)=> {
+    if(result.isAvailable){
+
+      this.androidFingerprintAuth.encrypt({ clientId: 'GreenPlyApp' })
+        .then(result => {
+           if (result.withFingerprint) {
+            this.tts.speak('Successfully logged in with fingerprint.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+            this.navCtrl.setRoot('DashboardPage');
+            //this.tts.speak(result.token).then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+           } else if (result.withBackup) {
+            this.tts.speak('You used the backup.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+            this.navCtrl.setRoot('DashboardPage');
+          } else this.tts.speak('Canceled. Click on the lock icon again.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+        })
+        .catch(error => {
+           if (error === this.androidFingerprintAuth.ERRORS.FINGERPRINT_CANCELLED) {
+            this.tts.speak('Canceled. Click on the lock icon again.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+           } else console.error(error)
+        });
+
+    } else {
+      this.tts.speak('Your device does not have a fingerprint scanner.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+    }
+  })
+  .catch(error => console.error(error));
   }
-
+  else{
+    this._loginService.adal();
+  }
+}
+  
 }
