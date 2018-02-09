@@ -6,18 +6,89 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Dashboard</ion-title>
+  <ion-navbar color="secondary">
+    <ion-title>
+        <img src="./assets/images/logo.PNG" class="logo"><button ion-button color="secondary" float-right (click)="logOut()"><ion-icon name="md-log-out"></ion-icon></button>
+    </ion-title>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content>
+<div style="padding:5%">
+  Welcome <b>{{user.Name}}</b>
+  <span float-right>{{cdc | date:'medium'}}&nbsp;&nbsp;</span>
+</div>
+<ion-grid align="center">
+<ion-item>
+  <ion-label>Meeting Type</ion-label>
+  <ion-select #newSelect [(ngModel)]="mtype" interface="action-sheet" cancelText="" (ionChange)="onChange(mtype)">
+    <ion-option value="planned">Planned</ion-option>
+    <ion-option value="unplanned">Unplanned</ion-option>
+  </ion-select>
+</ion-item>
+<br>
+<div *ngIf="plan==1">
+<ion-row>
+  <ion-item>
+  <ion-label>Agenda</ion-label>
+  <ion-select interface="action-sheet" cancelText="">
+    <ion-option value="order_booking">Order Booking</ion-option>
+    <ion-option value="collections">Collections</ion-option>
+    <ion-option value="business_development">Business Development</ion-option>
+  </ion-select>
+  </ion-item>
+</ion-row>
+<br>
 
-<ion-content padding>
-<h1>
-  DashBoard
-</h1>
-<p>
-  This is the managers dashboard.
-</p>
+<table>
+  <tr align="center" color="secondary">
+    <th>Completed</th>
+    <th>Dealer</th>
+  </tr>
+  <tr align="left" *ngFor="let d of data">
+    <td align="center"><ion-checkbox (click)="set(d)"></ion-checkbox></td>
+    <td>{{d.tec_dailyactivity3regardingobjectid.value.name}}</td>
+  </tr>
+</table>
+
+
+<ion-row>
+  <ion-item>
+    <ion-label color="secondary" floating>Description</ion-label>
+    <ion-textarea></ion-textarea>
+  </ion-item>
+</ion-row>
+<br>
+<button ion-button round color="secondary">Submit</button>
+</div>
+
+<div *ngIf="plan==2">
+    <ion-row>
+      <ion-item>
+      <ion-label>Agenda</ion-label>
+      <ion-select interface="action-sheet" cancelText="" #agenda required>
+        <ion-option value="order_booking">Order Booking</ion-option>
+        <ion-option value="collections">Collections</ion-option>
+        <ion-option value="business_development">Business Development</ion-option>
+      </ion-select>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+        <ion-item>
+          <ion-label color="secondary" floating>Reason</ion-label>
+          <ion-textarea></ion-textarea>
+        </ion-item>
+      </ion-row>
+      <ion-row>
+        <ion-item>
+          <ion-label color="secondary" floating>Description</ion-label>
+          <ion-textarea></ion-textarea>
+        </ion-item>
+      </ion-row>
+    <br>
+    <button ion-button round color="secondary" (click)="Send()">Submit</button>
+</div>
+
+</ion-grid>
+      
 </ion-content>

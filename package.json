@@ -61,7 +61,7 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-android-fingerprint-auth": {},
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+        "GEOLOCATION_USAGE_DESCRIPTION": "Allow GreenPly to access your device location"
       },
       "cordova-plugin-ms-adal": {}
     },

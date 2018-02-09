@@ -8,17 +8,18 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TestServiceProvider{
 
-  authenticated: boolean = false;
   data: any;
-  accesstoken:any;
   constructor(public http: Http,private msAdal: MSAdal, public loading: LoadingController, private tts: TextToSpeech){
     this.data = null;
-    this.accesstoken=null;
   }
     adal(){
+
         if (this.data) {
           return Promise.resolve(this.data);
         }
+
+ var authContext = this.msAdal.createAuthenticationContext("https://login.windows.net/common");
+ authContext.tokenCache.clear();
         this.tts.speak('Please Login with your Official Microsoft Account.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
         return new Promise(resolve => {
         var extraQueryParams = 'nux=1';
@@ -32,10 +33,9 @@ export class TestServiceProvider{
         let authContext: AuthenticationContext = this.msAdal.createAuthenticationContext(authority);
         authContext.acquireTokenAsync(resourceUri, clientid, redirectUri,userId,extraQueryParams)
           
-        .then((data: AuthenticationResult) => {  
-          this.authenticated=true;
+        .then((data: AuthenticationResult) => { 
           this.data = data;
-          this.getUser();
+          localStorage.setItem('currentUser', JSON.stringify({ Name: data.userInfo.givenName, EMail: data.userInfo.uniqueId }));
           resolve(this.data);
           loading.dismiss();
           })
@@ -46,13 +46,11 @@ export class TestServiceProvider{
           
         });
       }
-  getUser(){
-    this.http.get('https://www.reddit.com/r/gifs/new/.json?limit=10').map(res => res.json()).subscribe(data => {
-    alert(data.data.children);
-});
-  }
+
+      logout(){
+ localStorage.removeItem('currentUser');
+ var authContext = this.msAdal.createAuthenticationContext("https://login.windows.net/common");
+ authContext.tokenCache.clear();
+      }
 
 }
-
-
-

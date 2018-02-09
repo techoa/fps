@@ -10,13 +10,17 @@ import { MSAdal } from '@ionic-native/ms-adal';
 import { HttpModule } from '@angular/http';
 
 import { MyApp } from './app.component';
+import { TabsPage } from '../pages/tabs/tabs';
 import { HomePage } from '../pages/home/home';
+import { DashboardPage } from '../pages/dashboard/dashboard';
 import { TestServiceProvider } from '../providers/test-service/test-service';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    TabsPage,
+    DashboardPage
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,9 @@ import { TestServiceProvider } from '../providers/test-service/test-service';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    TabsPage,
+    DashboardPage
   ],
   providers: [
     StatusBar,
