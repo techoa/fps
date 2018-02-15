@@ -16,11 +16,14 @@ export class HomePage {
   constructor( private _loginService: TestServiceProvider,public loading: LoadingController,private androidFingerprintAuth: AndroidFingerprintAuth, public navCtrl: NavController, private tts: TextToSpeech, private platform: Platform){
     if (this.platform.is('ios')) {this.plat="IOS";}
     if (this.platform.is('android')) {this.plat="Android";}
-    this.tts.speak('Welcome to the GreenPly\'s App for '+this.plat+'. Please login by clicking on the icon.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+  }
+
+  ionViewDidLoad(){
+    this.login();
   }
   
 fps(){
-  this.tts.speak('Please Authenticate to continue.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+  this.tts.speak('Welcome to the GreenPly\'s App for '+this.plat+'. Please authenticate to continue.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
   this.androidFingerprintAuth.isAvailable()
   .then((result)=> {
     if(result.isAvailable){

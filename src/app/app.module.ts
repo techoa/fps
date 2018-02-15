@@ -11,6 +11,7 @@ import { HttpModule } from '@angular/http';
 
 import { MyApp } from './app.component';
 import { TabsPage } from '../pages/tabs/tabs';
+import { MapsPage } from '../pages/maps/maps';
 import { HomePage } from '../pages/home/home';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { TestServiceProvider } from '../providers/test-service/test-service';
@@ -20,7 +21,8 @@ import { TestServiceProvider } from '../providers/test-service/test-service';
     MyApp,
     HomePage,
     TabsPage,
-    DashboardPage
+    DashboardPage,
+    MapsPage
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,8 @@ import { TestServiceProvider } from '../providers/test-service/test-service';
     MyApp,
     HomePage,
     TabsPage,
-    DashboardPage
+    DashboardPage,
+    MapsPage
   ],
   providers: [
     StatusBar,

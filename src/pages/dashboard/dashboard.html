@@ -16,7 +16,7 @@
 <ion-content>
 <div style="padding:5%">
   Welcome <b>{{user.Name}}</b>
-  <span float-right>{{cdc | date:'medium'}}&nbsp;&nbsp;</span>
+  <span float-right>{{cdc | date:'yyyy-MM-dd'}}&nbsp;&nbsp;</span>
 </div>
 <ion-grid align="center">
 <ion-item>
@@ -27,19 +27,20 @@
   </ion-select>
 </ion-item>
 <br>
-<div *ngIf="plan==1">
-<ion-row>
-  <ion-item>
-  <ion-label>Agenda</ion-label>
-  <ion-select interface="action-sheet" cancelText="">
-    <ion-option value="order_booking">Order Booking</ion-option>
-    <ion-option value="collections">Collections</ion-option>
-    <ion-option value="business_development">Business Development</ion-option>
-  </ion-select>
-  </ion-item>
-</ion-row>
-<br>
 
+<div *ngIf="plan==1">
+  <ion-row>
+    <ion-item>
+    <ion-label>Agenda</ion-label>
+    <ion-select required interface="action-sheet" cancelText="" #agenda required (ionChange)="addAgenda(agenda.value)">
+      <ion-option value="Order Booking">Order Booking</ion-option>
+      <ion-option value="Collections">Collections</ion-option>
+      <ion-option value="Business Development">Business Development</ion-option>
+    </ion-select>
+    </ion-item>
+  </ion-row>
+<br>
+<ion-row>
 <table>
   <tr align="center" color="secondary">
     <th>Completed</th>
@@ -50,39 +51,38 @@
     <td>{{d.tec_dailyactivity3regardingobjectid.value.name}}</td>
   </tr>
 </table>
-
-
+</ion-row>
 <ion-row>
-  <ion-item>
-    <ion-label color="secondary" floating>Description</ion-label>
-    <ion-textarea></ion-textarea>
-  </ion-item>
+    <ion-item>
+        <ion-label color="secondary" floating>Description</ion-label>
+        <ion-textarea required (change)="desc = $event.target.value"></ion-textarea>
+      </ion-item>
 </ion-row>
 <br>
-<button ion-button round color="secondary">Submit</button>
+<button ion-button round color="secondary" (click)="Send()">Submit</button>
 </div>
 
 <div *ngIf="plan==2">
     <ion-row>
       <ion-item>
       <ion-label>Agenda</ion-label>
-      <ion-select interface="action-sheet" cancelText="" #agenda required>
-        <ion-option value="order_booking">Order Booking</ion-option>
-        <ion-option value="collections">Collections</ion-option>
-        <ion-option value="business_development">Business Development</ion-option>
+      <ion-select required interface="action-sheet" cancelText="" #agenda required (ionChange)="addAgenda(agenda.value)">
+        <ion-option value="Order Booking">Order Booking</ion-option>
+        <ion-option value="Collections">Collections</ion-option>
+        <ion-option value="Business Development">Business Development</ion-option>
       </ion-select>
       </ion-item>
     </ion-row>
     <ion-row>
         <ion-item>
-          <ion-label color="secondary" floating>Reason</ion-label>
-          <ion-textarea></ion-textarea>
+          <ion-label color="secondary" floating>Subject</ion-label>
+          <ion-textarea required (change)="sub = $event.target.value"></ion-textarea>
         </ion-item>
       </ion-row>
       <ion-row>
         <ion-item>
           <ion-label color="secondary" floating>Description</ion-label>
-          <ion-textarea></ion-textarea>
+          <ion-textarea required (change)="desc = $event.target.value"></ion-textarea>
         </ion-item>
       </ion-row>
     <br>
@@ -90,5 +90,4 @@
 </div>
 
 </ion-grid>
-      
 </ion-content>
