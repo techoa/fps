@@ -1,14 +1,8 @@
-<!--
-  Generated template for the DashboardPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar color="secondary">
     <ion-title>
-        <img src="./assets/images/logo.PNG" class="logo"><button ion-button color="secondary" float-right (click)="logOut()"><ion-icon name="md-log-out"></ion-icon></button>
+        <img src="./assets/images/d.png" class="logo"><button ion-button color="secondary" float-right (click)="logOut()"><ion-icon name="md-log-out"></ion-icon></button>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -41,14 +35,16 @@
   </ion-row>
 <br>
 <ion-row>
-<table>
+<table *ngIf="data[0].tec_dailyactivity3activityid!=null">
   <tr align="center" color="secondary">
     <th>Completed</th>
     <th>Dealer</th>
+    <th>Navigate</th>
   </tr>
   <tr align="left" *ngFor="let d of data">
-    <td align="center"><ion-checkbox (click)="set(d)"></ion-checkbox></td>
-    <td>{{d.tec_dailyactivity3regardingobjectid.value.name}}</td>
+    <td align="center"><input type="radio" name="radiogroup" disabled="{{getS(d) ? 'true' : ''}}" (change)="set(d)"></td>
+    <td class="{{getS(d) ? 'comp' : ''}}">{{d.tec_dailyactivity3regardingobjectid.value.name}}</td>
+    <td align="center"><a href="http://maps.google.com/maps?daddr={{d.account4tec_latitude.value}},{{d.account4tec_longitude.value}}"><ion-icon name="navigate"></ion-icon></a></td>
   </tr>
 </table>
 </ion-row>
@@ -59,7 +55,8 @@
       </ion-item>
 </ion-row>
 <br>
-<button ion-button round color="secondary" (click)="Send()">Submit</button>
+<button ion-button round color="secondary">Submit</button>
+<!--<button ion-button round color="secondary" (click)="Send()">Submit</button>-->
 </div>
 
 <div *ngIf="plan==2">
@@ -86,7 +83,8 @@
         </ion-item>
       </ion-row>
     <br>
-    <button ion-button round color="secondary" (click)="Send()">Submit</button>
+    <button ion-button round color="secondary">Submit</button>
+    <!--<button ion-button round color="secondary" (click)="Send()">Submit</button>-->
 </div>
 
 </ion-grid>

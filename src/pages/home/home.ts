@@ -4,6 +4,7 @@ import { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth';
 import { Platform, NavController, LoadingController } from 'ionic-angular';
 import { TestServiceProvider } from '../../providers/test-service/test-service';
 import { TabsPage } from '../tabs/tabs';
+
 import 'rxjs/add/operator/map';
 
 @Component({
@@ -13,7 +14,7 @@ import 'rxjs/add/operator/map';
 export class HomePage {
   plat: string;
   at: any;
-  constructor( private _loginService: TestServiceProvider,public loading: LoadingController,private androidFingerprintAuth: AndroidFingerprintAuth, public navCtrl: NavController, private tts: TextToSpeech, private platform: Platform){
+  constructor(private _loginService: TestServiceProvider,public loading: LoadingController,private androidFingerprintAuth: AndroidFingerprintAuth, public navCtrl: NavController, private tts: TextToSpeech, private platform: Platform){
     if (this.platform.is('ios')) {this.plat="IOS";}
     if (this.platform.is('android')) {this.plat="Android";}
   }
@@ -23,12 +24,12 @@ export class HomePage {
   }
   
 fps(){
-  this.tts.speak('Welcome to the GreenPly\'s App for '+this.plat+'. Please authenticate to continue.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+  this.tts.speak('Welcome to the Field Force Manager App for '+this.plat+'. Please authenticate to continue.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
   this.androidFingerprintAuth.isAvailable()
   .then((result)=> {
     if(result.isAvailable){
 
-      this.androidFingerprintAuth.encrypt({ clientId: 'GreenPlyApp' })
+      this.androidFingerprintAuth.encrypt({ clientId: 'FieldForce' })
         .then(result => {
            if (result.withFingerprint) {
             this.navCtrl.setRoot(TabsPage);
@@ -45,6 +46,7 @@ fps(){
 
     } else {
       this.tts.speak('Your device does not have a fingerprint scanner.').then(() => console.log('TTS used')).catch((reason: any) => console.error(reason));
+      this.navCtrl.setRoot(TabsPage);
     }
   })
   .catch(error => console.error(error));
@@ -58,5 +60,4 @@ this.fps();
     this._loginService.adal();
   }
 }
-  
 }

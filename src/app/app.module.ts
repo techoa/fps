@@ -8,6 +8,7 @@ import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { Geolocation } from '@ionic-native/geolocation';
 import { MSAdal } from '@ionic-native/ms-adal';
 import { HttpModule } from '@angular/http';
+import { Network } from '@ionic-native/network';
 
 import { MyApp } from './app.component';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -42,6 +43,7 @@ import { TestServiceProvider } from '../providers/test-service/test-service';
     TextToSpeech,
     AndroidFingerprintAuth,
     Geolocation,
+    Network,
     SplashScreen,
     MSAdal,
     TestServiceProvider,

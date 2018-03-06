@@ -1,4 +1,4 @@
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, Platform } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
 import { TestServiceProvider } from '../../providers/test-service/test-service';
@@ -6,7 +6,8 @@ import { HomePage } from '../home/home';
 import { DashboardPage } from '../dashboard/dashboard';
 
 declare var google;
-
+declare var navigator: any;
+declare var Connection: any;
 @IonicPage()
 @Component({
   selector: 'page-maps',
@@ -18,19 +19,37 @@ export class MapsPage {
   lat: any;
   long: any;
   totalDist:any;
-  constructor(private _loginService: TestServiceProvider,private geolocation: Geolocation, public navCtrl: NavController) {
-    this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 3000, enableHighAccuracy: true }).then((resp) => {
+  constructor(private platform: Platform,private _loginService: TestServiceProvider,private geolocation: Geolocation, public navCtrl: NavController) {
+      this.geolocation.getCurrentPosition({ maximumAge: 5000, timeout: 5000, enableHighAccuracy: true }).then((resp) => {
       this.lat=resp.coords.latitude;
       this.long=resp.coords.longitude;
-      this.initMap();
+      this.platform.ready().then(() => {
+        var networkState = navigator.connection.type;
+        if(networkState==="none"){
+          alert('You can\'t access MAPS while your device is offline!');
+          navCtrl.push(DashboardPage);
+        }
+        else{
+          this.initMap();
+        }
+  });
     }).catch((error) => {
-        this.lat=28.4510907;
-        this.long=77.0692292;
-        this.initMap();
+        this.lat=28.4937349;
+        this.long=77.0875591;
+        this.platform.ready().then(() => {
+          var networkState = navigator.connection.type;
+          if(networkState==="none"){
+            alert('You can\'t access MAPS while your device is offline!');
+            navCtrl.push(DashboardPage);
+          }
+          else{
+            this.initMap();
+          }
+    });
       });
     
   }
-  initMap() {
+  initMap() {    
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
@@ -50,13 +69,7 @@ export class MapsPage {
     let destinv=new google.maps.LatLng(0,0);
     for(let c of cord){
       counter++;
-      let locationc = new google.maps.LatLng(c.lat, c.long);
-      waypts.push({
-        location: locationc,
-        stopover: true
-      });
       }
-      counter--;
       if(counter==0){
         alert('No Planned Activity for the Day!');
         this.navCtrl.setRoot(DashboardPage);
@@ -65,9 +78,20 @@ export class MapsPage {
         originv=new google.maps.LatLng(cord[0].lat, cord[0].long);
         destinv=new google.maps.LatLng(cord[0].lat, cord[0].long);
       }
+      else if(counter==2){
+        originv=new google.maps.LatLng(cord[0].lat, cord[0].long);
+        destinv=new google.maps.LatLng(cord[1].lat, cord[1].long);
+      }
       else{
-        originv=new google.maps.LatLng(cord[counter].lat, cord[counter].long);
-        destinv=new google.maps.LatLng(cord[counter].lat, cord[counter].long);
+        originv=new google.maps.LatLng(cord[0].lat, cord[0].long);
+        destinv=new google.maps.LatLng(cord[counter-1].lat, cord[counter-1].long);
+        for(var q=1;q<counter-1;q++){
+          let locationc = new google.maps.LatLng(cord[q].lat, cord[q].long);
+          waypts.push({
+            location: locationc,
+            stopover: true
+          });
+        }
       }
     directionsService.route({
       origin: originv,
@@ -86,7 +110,7 @@ export class MapsPage {
         }
         alert('Total Distance to be travelled: '+this.totalDist/1000+' KM');
       } else {
-        window.alert('Directions request failed due to ' + status);
+        //window.alert('Directions request failed due to ' + status);
       }
     });
   }
